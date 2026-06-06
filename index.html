@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>⚡UTTAM"S CYBER MATH</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Courier New', monospace;
+      background: #0a0a0a;
+      overflow: hidden;
+    }
+
+    /* Cyberpunk grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: 
+        linear-gradient(rgba(0,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,255,0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: gridMove 20s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes gridMove {
+      0%   { transform: translateY(0); }
+      100% { transform: translateY(50px); }
+    }
+
+    /* Floating particles canvas */
+    #particles {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .game-container {
+      position: relative;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid #00ffff;
+      border-radius: 20px;
+      padding: 40px;
+      width: 420px;
+      text-align: center;
+      box-shadow: 
+        0 0 30px rgba(0,255,255,0.3),
+        0 0 60px rgba(0,255,255,0.1),
+        inset 0 0 30px rgba(0,255,255,0.05);
+    }
+
+    h1 {
+      font-size: 26px;
+      color: #00ffff;
+      letter-spacing: 4px;
+      text-shadow: 
+        0 0 10px #00ffff,
+        0 0 20px #00ffff,
+        0 0 40px #00ffff;
+      animation: flicker 3s infinite;
+      margin-bottom: 5px;
+    }
+
+    @keyframes flicker {
+      0%,95%,100% { opacity: 1; }
+      96%          { opacity: 0.4; }
+      97%          { opacity: 1; }
+      98%          { opacity: 0.2; }
+    }
+
+    .subtitle {
+      color: #ff00ff;
+      font-size: 11px;
+      letter-spacing: 3px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #ff00ff;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      margin: 15px 0;
+      gap: 10px;
+    }
+
+    .stat-box {
+      flex: 1;
+      background: rgba(0,255,255,0.05);
+      border: 1px solid rgba(0,255,255,0.2);
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      color: #888;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .stat-value {
+      font-size: 26px;
+      font-weight: bold;
+      color: #00ffff;
+      text-shadow: 0 0 10px #00ffff;
+    }
+
+    .timer-bar {
+      width: 100%;
+      height: 6px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      margin: 15px 0;
+      overflow: hidden;
+    }
+
+    .timer-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #ff00ff, #00ffff);
+      border-radius: 10px;
+      transition: width 1s linear;
+      box-shadow: 0 0 10px #00ffff;
+    }
+
+    .question-box {
+      border: 2px solid #ff00ff;
+      border-radius: 15px;
+      padding: 25px;
+      margin: 20px 0;
+      font-size: 38px;
+      font-weight: bold;
+      color: #ff00ff;
+      text-shadow: 
+        0 0 10px #ff00ff,
+        0 0 20px #ff00ff;
+      letter-spacing: 4px;
+      animation: questionPulse 2s infinite;
+      box-shadow: 
+        0 0 20px rgba(255,0,255,0.2),
+        inset 0 0 20px rgba(255,0,255,0.05);
+    }
+
+    @keyframes questionPulse {
+      0%,100% { box-shadow: 0 0 20px rgba(255,0,255,0.2); }
+      50%      { box-shadow: 0 0 40px rgba(255,0,255,0.5); }
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      font-size: 22px;
+      text-align: center;
+      border: 2px solid rgba(0,255,255,0.3);
+      border-radius: 10px;
+      background: rgba(0,255,255,0.05);
+      color: #00ffff;
+      outline: none;
+      margin-bottom: 15px;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 2px;
+      transition: all 0.3s;
+    }
+
+    input:focus {
+      border-color: #00ffff;
+      box-shadow: 0 0 20px rgba(0,255,255,0.3);
+      background: rgba(0,255,255,0.08);
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      font-size: 16px;
+      font-weight: bold;
+      font-family: 'Courier New', monospace;
+      background: transparent;
+      color: #00ffff;
+      border: 2px solid #00ffff;
+      border-radius: 10px;
+      cursor: pointer;
+      letter-spacing: 3px;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      box-shadow: 0 0 10px rgba(0,255,255,0.2);
+    }
+
+    button:hover {
+      background: #00ffff;
+      color: #000;
+      box-shadow: 
+        0 0 20px rgba(0,255,255,0.6),
+        0 0 40px rgba(0,255,255,0.3);
+      transform: translateY(-2px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .message {
+      margin-top: 15px;
+      font-size: 20px;
+      font-weight: bold;
+      height: 30px;
+      letter-spacing: 2px;
+    }
+
+    .correct {
+      color: #00ff88;
+      text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88;
+      animation: bounce 0.4s ease;
+    }
+
+    .wrong {
+      color: #ff0055;
+      text-shadow: 0 0 10px #ff0055, 0 0 20px #ff0055;
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes bounce {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.4); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes shake {
+      0%   { transform: translateX(0); }
+      20%  { transform: translateX(-12px); }
+      60%  { transform: translateX(12px); }
+      100% { transform: translateX(0); }
+    }
+
+    .streak {
+      font-size: 12px;
+      color: #f0a500;
+      text-shadow: 0 0 10px #f0a500;
+      letter-spacing: 2px;
+      margin-top: 5px;
+      height: 20px;
+    }
+
+    /* Screen flash overlay */
+    #flash {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0;
+    }
+
+    /* Fireworks canvas */
+    #fireworks {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 998;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Effects layers -->
+<canvas id="particles"></canvas>
+<canvas id="fireworks"></canvas>
+<div id="flash"></div>
+
+<div class="game-container">
+  <h1>⚡ UTTAM"S CYBER MATH ⚡</h1>
+  <div class="subtitle">// NEURAL ARITHMETIC TRAINING //</div>
+
+  <div class="stats">
+    <div class="stat-box">
+      <div class="stat-label">Score</div>
+      <div class="stat-value" id="score">0</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Time</div>
+      <div class="stat-value" id="timer">60</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Best</div>
+      <div class="stat-value" id="best">0</div>
+    </div>
+  </div>
+
+  <div class="timer-bar">
+    <div class="timer-fill" id="timerFill"></div>
+  </div>
+
+  <div class="question-box" id="question"></div>
+
+  <input type="number" id="answer" placeholder="_ _ _"
+         onkeypress="if(event.key==='Enter') checkAnswer()">
+
+  <button onclick="checkAnswer()">[ EXECUTE ]</button>
+
+  <div class="message" id="message"></div>
+  <div class="streak" id="streak"></div>
+</div>
+
+<script>
+// ─── GAME VARIABLES ───────────────────────────────
+let num1 = 0, num2 = 0, operator = "+";
+let score = 0, time = 60, best = 0, streak = 0;
+const totalTime = 60;
+
+// ─── PARTICLES ────────────────────────────────────
+const pCanvas = document.getElementById('particles');
+const pCtx = pCanvas.getContext('2d');
+pCanvas.width = window.innerWidth;
+pCanvas.height = window.innerHeight;
+
+const particles = Array.from({length: 80}, () => ({
+  x: Math.random() * pCanvas.width,
+  y: Math.random() * pCanvas.height,
+  size: Math.random() * 2 + 0.5,
+  speedX: (Math.random() - 0.5) * 0.5,
+  speedY: (Math.random() - 0.5) * 0.5,
+  color: Math.random() > 0.5 ? '#00ffff' : '#ff00ff',
+  opacity: Math.random() * 0.5 + 0.2
+}));
+
+function animateParticles() {
+  pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+  particles.forEach(p => {
+    p.x += p.speedX;
+    p.y += p.speedY;
+    if (p.x < 0 || p.x > pCanvas.width)  p.speedX *= -1;
+    if (p.y < 0 || p.y > pCanvas.height) p.speedY *= -1;
+    pCtx.beginPath();
+    pCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    pCtx.fillStyle = p.color;
+    pCtx.globalAlpha = p.opacity;
+    pCtx.fill();
+  });
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+// ─── FIREWORKS ────────────────────────────────────
+const fCanvas = document.getElementById('fireworks');
+const fCtx = fCanvas.getContext('2d');
+fCanvas.width = window.innerWidth;
+fCanvas.height = window.innerHeight;
+
+let fireworkParticles = [];
+
+function launchFirework() {
+  const x = Math.random() * fCanvas.width;
+  const y = Math.random() * fCanvas.height * 0.5;
+  const colors = ['#00ffff','#ff00ff','#00ff88','#f0a500','#ffffff'];
+  for (let i = 0; i < 40; i++) {
+    const angle = (Math.PI * 2 / 40) * i;
+    const speed = Math.random() * 4 + 2;
+    fireworkParticles.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      alpha: 1,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      size: Math.random() * 3 + 1
+    });
+  }
+}
+
+function animateFireworks() {
+  fCtx.clearRect(0, 0, fCanvas.width, fCanvas.height);
+  fireworkParticles = fireworkParticles.filter(p => p.alpha > 0.01);
+  fireworkParticles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.08;
+    p.alpha -= 0.02;
+    fCtx.beginPath();
+    fCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    fCtx.fillStyle = p.color;
+    fCtx.globalAlpha = p.alpha;
+    fCtx.fill();
+  });
+  requestAnimationFrame(animateFireworks);
+}
+animateFireworks();
+
+// ─── SCREEN FLASH ─────────────────────────────────
+function flashScreen(color) {
+  const flash = document.getElementById('flash');
+  flash.style.background = color;
+  flash.style.opacity = '0.15';
+  setTimeout(() => { flash.style.opacity = '0'; }, 150);
+}
+
+// ─── GAME LOGIC ───────────────────────────────────
+function generateQuestion() {
+  num1 = Math.floor(Math.random() * 20) + 1;
+  num2 = Math.floor(Math.random() * 20) + 1;
+  const ops = ["+", "-", "*", "/"];
+  operator = ops[Math.floor(Math.random() * ops.length)];
+  if (operator === "/") num1 = num1 * num2;
+  document.getElementById("question").innerText =
+    num1 + " " + operator + " " + num2 + " = ?";
+}
+
+function checkAnswer() {
+  const input = document.getElementById("answer");
+  if (input.value === "") return;
+
+  const userAnswer = Number(input.value);
+  let correct = 0;
+  if (operator === "+") correct = num1 + num2;
+  if (operator === "-") correct = num1 - num2;
+  if (operator === "*") correct = num1 * num2;
+  if (operator === "/") correct = num1 / num2;
+
+  const msg = document.getElementById("message");
+
+  if (userAnswer === correct) {
+    score++;
+    streak++;
+    // Fireworks on correct!
+    launchFirework();
+    launchFirework();
+    // Green flash
+    flashScreen('#00ff88');
+    msg.innerText = streak >= 3 ?
+      `🔥 ${streak} STREAK! CORRECT!` : "✅ CORRECT!";
+    msg.className = "message correct";
+    document.getElementById("streak").innerText =
+      streak >= 3 ? `⚡ ${streak}x COMBO ACTIVATED ⚡` : "";
+  } else {
+    streak = 0;
+    // Red flash on wrong
+    flashScreen('#ff0055');
+    msg.innerText = "❌ WRONG! ANS: " + correct;
+    msg.className = "message wrong";
+    document.getElementById("streak").innerText = "";
+  }
+
+  setTimeout(() => {
+    msg.innerText = "";
+    msg.className = "message";
+  }, 1000);
+
+  document.getElementById("score").innerText = score;
+  input.value = "";
+  generateQuestion();
+  input.focus();
+}
+
+// ─── TIMER ────────────────────────────────────────
+const countdown = setInterval(() => {
+  time--;
+  document.getElementById("timer").innerText = time;
+  document.getElementById("timerFill").style.width =
+    (time / totalTime * 100) + "%";
+
+  if (time <= 10) {
+    document.getElementById("timer").style.color = "#ff0055";
+    document.getElementById("timer").style.textShadow = "0 0 10px #ff0055";
+  }
+
+  if (time <= 0) {
+    clearInterval(countdown);
+    if (score > best) {
+      best = score;
+      document.getElementById("best").innerText = best;
+    }
+    setTimeout(() => {
+      alert(`⚡ GAME OVER ⚡\nSCORE: ${score}\nBEST: ${best}`);
+      location.reload();
+    }, 100);
+  }
+}, 1000);
+
+// ─── INIT ─────────────────────────────────────────
+generateQuestion();
+document.getElementById("timerFill").style.width = "100%";
+document.getElementById("answer").focus();
+</script>
+
+</body>
+</html>

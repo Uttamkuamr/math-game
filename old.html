@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Math Game</title>
+</head>
+<body>
+
+<h1>Arithmetic Game</h1>
+<h3 id="timer">Time: 60</h3>
+
+<h2 id="question"></h2>
+
+<input type="number" id="answer" placeholder="Enter answer">
+<button onclick="checkAnswer()">Submit</button>
+
+<p>Score: <span id="score">0</span></p>
+
+<script>
+let num1 = 0;
+let num2 = 0;
+let operator = "+";
+let score = 0;
+let time = 60;
+
+function generateQuestion() {
+  num1 = Math.floor(Math.random() * 20) + 1;
+  num2 = Math.floor(Math.random() * 20) + 1;
+
+  let ops = ["+", "-", "*", "/"];
+  operator = ops[Math.floor(Math.random() * ops.length)];
+
+  // avoid division by zero & make clean division
+  if (operator === "/") {
+    num1 = num1 * num2;
+  }
+
+  document.getElementById("question").innerText =
+    num1 + " " + operator + " " + num2;
+}
+
+function checkAnswer() {
+  let userAnswer = Number(document.getElementById("answer").value);
+  let correct = 0;
+
+  if (operator === "+") correct = num1 + num2;
+  if (operator === "-") correct = num1 - num2;
+  if (operator === "*") correct = num1 * num2;
+  if (operator === "/") correct = num1 / num2;
+
+  if (userAnswer === correct) {
+    score++;
+  }
+
+
+  // if correct
+  document.getElementById("message").innerText = "Correct! ✅"
+
+  // if wrong
+  document.getElementById("message").innerText = "Wrong! ❌"
+
+  // make it disappear after 1 second
+  setTimeout(() => {
+    document.getElementById("message").innerText = ""
+  }, 1000)
+
+
+
+  
+  document.getElementById("score").innerText = score;
+  document.getElementById("answer").value = "";
+
+  generateQuestion();
+}
+
+setInterval(() => {
+  time--;
+  document.getElementById("timer").innerText = "Time: " + time;
+
+  if (time <= 0) {
+    alert("Game Over! Score: " + score);
+    location.reload();
+  }
+}, 1000);
+
+
+<p id="message"></p>
+
+generateQuestion();
+</script>
+
+</body>
+</html>
